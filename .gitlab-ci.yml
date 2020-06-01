@@ -1,0 +1,52 @@
+---
+include: 
+  - remote: 'https://gitlab.bmhughes.co.uk/bmhughes-net-chef-public/bmhughes_net_chef_testing/-/raw/master/gitlab-ci-chef-cookbook-16.yml'
+
+kitchen_default-centos-7:
+  extends:
+    - .kitchen_docker_template
+    - .kitchen_test_definition
+  stage: default
+  variables:
+    KITCHEN_NAME: default-centos-7
+
+kitchen_default-centos-8:
+  extends:
+    - .kitchen_docker_template
+    - .kitchen_test_definition
+  stage: default
+  variables:
+    KITCHEN_NAME: default-centos-8
+
+kitchen_default-fedora-31:
+  extends:
+    - .kitchen_docker_template
+    - .kitchen_test_definition
+  stage: default
+  variables:
+    KITCHEN_NAME: default-fedora-31
+
+kitchen_default-ubuntu-1804:
+  extends:
+    - .kitchen_docker_template
+    - .kitchen_test_definition
+  stage: default
+  variables:
+    KITCHEN_NAME: default-ubuntu-1804
+
+kitchen_default-ubuntu-2004:
+  extends:
+    - .kitchen_docker_template
+    - .kitchen_test_definition
+  stage: default
+  variables:
+    KITCHEN_NAME: default-ubuntu-2004
+
+kitchen_default-debian-10:
+  extends:
+    - .kitchen_docker_template
+    - .kitchen_test_definition
+  stage: default
+  variables:
+    KITCHEN_NAME: default-debian-10
+...

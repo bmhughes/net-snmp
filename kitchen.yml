@@ -1,0 +1,31 @@
+---
+driver:
+  name: vagrant
+  chef_version: current
+
+provisioner:
+  name: chef_zero
+  always_update_cookbooks: true
+  deprecations_as_errors: true
+  chef_license: accept
+  chef_log_level: auto
+  product_name: chef
+  product_version: latest
+
+verifier:
+  name: inspec
+
+platforms:
+  - name: centos-7
+  - name: centos-8
+  - name: fedora-30
+
+suites:
+  - name: default
+    run_list:
+      - recipe[net_snmp::default]
+    verifier:
+      inspec_tests:
+        - test/integration/default
+    attributes:
+...
