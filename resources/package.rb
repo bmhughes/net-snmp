@@ -1,6 +1,6 @@
 #
 # Cookbook:: net_snmp
-# Recipe:: default
+# Resource:: package
 #
 # Copyright:: 2020, Ben Hughes
 #
@@ -16,4 +16,30 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-include_recipe '::package'
+include NetSnmp::Cookbook::PackageHelpers
+
+property :packages, [String, Array],
+          default: lazy { default_net_snmp_packages },
+          description: 'A list of packages to install'
+
+action_class do
+  def do_action(package_action)
+    new_resource.packages.each do |pkg|
+      package pkg do
+        action package_action
+      end
+    end
+  end
+end
+
+action :install do
+  do_action(action)
+end
+
+action :upgrade do
+  do_action(action)
+end
+
+action :remove do
+  do_action(action)
+end

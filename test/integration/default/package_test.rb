@@ -1,6 +1,6 @@
 #
 # Cookbook:: net_snmp
-# Recipe:: default
+# Spec:: package
 #
 # Copyright:: 2020, Ben Hughes
 #
@@ -16,4 +16,17 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-include_recipe '::package'
+case os.family
+when 'redhat', 'fedora'
+  %w(net-snmp net-snmp-utils).each do |package|
+    describe package(package) do
+      it { should be_installed }
+    end
+  end
+when 'debian'
+  %w(snmp snmpd).each do |package|
+    describe package(package) do
+      it { should be_installed }
+    end
+  end
+end

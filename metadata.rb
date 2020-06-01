@@ -9,4 +9,4 @@ chef_version '>= 14.0'
 issues_url 'https://gitlab.bmhughes.co.uk/bmhughes-net-chef/wrappers/net_snmp/issues'
 source_url 'https://gitlab.bmhughes.co.uk/bmhughes-net-chef/wrappers/net_snmp'
 
-%w(centos fedora redhat).each do { |os| supports os }
+%w(centos fedora redhat debian ubuntu).each { |os| supports os }

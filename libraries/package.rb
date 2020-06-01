@@ -1,6 +1,6 @@
 #
 # Cookbook:: net_snmp
-# Recipe:: default
+# Library:: package
 #
 # Copyright:: 2020, Ben Hughes
 #
@@ -16,4 +16,19 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-include_recipe '::package'
+module NetSnmp
+  module Cookbook
+    module PackageHelpers
+      def default_net_snmp_packages
+        case node['platform_family']
+        when 'rhel', 'fedora'
+          %w(net-snmp net-snmp-agent-libs net-snmp-devel net-snmp-libs net-snmp-utils)
+        when 'debian'
+          %w(snmp snmpd snmptrapd)
+        else
+          raise "Platform family #{node['platform_family']} is not supported"
+        end
+      end
+    end
+  end
+end

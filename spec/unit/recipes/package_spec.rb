@@ -1,6 +1,6 @@
 #
 # Cookbook:: net_snmp
-# Recipe:: default
+# Spec:: package
 #
 # Copyright:: 2020, Ben Hughes
 #
@@ -16,4 +16,19 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-include_recipe '::package'
+require 'spec_helper'
+
+describe 'net_snmp::package' do
+  platform 'centos'
+  step_into :net_snmp_package
+
+  context 'Install the net-snmp packages' do
+    describe 'Installs net-snmp package' do
+      it { is_expected.to install_package('net-snmp') }
+    end
+
+    describe 'Installs net-snmp-utils package' do
+      it { is_expected.to install_package('net-snmp-utils') }
+    end
+  end
+end

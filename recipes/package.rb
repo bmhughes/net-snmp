@@ -1,6 +1,6 @@
 #
 # Cookbook:: net_snmp
-# Recipe:: default
+# Recipe:: package
 #
 # Copyright:: 2020, Ben Hughes
 #
@@ -16,4 +16,4 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-include_recipe '::package'
+net_snmp_package 'net-snmp'
