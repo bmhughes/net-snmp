@@ -53,6 +53,7 @@ module NetSnmp
             sensitive new_resource.sensitive
 
             helpers(NetSnmp::Cookbook::GeneralHelpers)
+            helpers(NetSnmp::Cookbook::TemplateHelpers)
 
             action :nothing
             delayed_action :create

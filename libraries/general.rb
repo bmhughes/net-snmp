@@ -31,6 +31,10 @@ module NetSnmp
         'snmpd.conf'
       end
 
+      def snmpd_config_user_file
+        'snmpd.users.conf'
+      end
+
       def default_net_snmp_user
         'root'
       end
@@ -88,7 +92,7 @@ module NetSnmp
               'Type' => 'notify',
               'Environment' => 'OPTIONS="-LS0-6d"',
               'EnvironmentFile' => '-/etc/sysconfig/snmpd',
-              'ExecStart' => "/usr/sbin/snmpd $OPTIONS -f -c #{config_file}",
+              'ExecStart' => "/usr/sbin/snmpd $OPTIONS -f -c #{snmp_config_dir}/#{snmpd_config_file},#{snmp_config_dir}/#{snmpd_config_user_file}",
               'ExecReload' => '/bin/kill -HUP $MAINPID',
             },
             'Install' => {
@@ -109,7 +113,7 @@ module NetSnmp
               ],
               'Type' => 'simple',
               'ExecStartPre' => '/bin/mkdir -p /var/run/agentx',
-              'ExecStart' => "/usr/sbin/snmpd -Lsd -Lf /dev/null -u Debian-snmp -g Debian-snmp -I -smux,mteTrigger,mteTriggerConf -f -p /run/snmpd.pid -c #{config_file}",
+              'ExecStart' => "/usr/sbin/snmpd -Lsd -Lf /dev/null -u Debian-snmp -g Debian-snmp -I -smux,mteTrigger,mteTriggerConf -f -p /run/snmpd.pid -c #{snmp_config_dir}/#{snmpd_config_file},#{snmp_config_dir}/#{snmpd_config_user_file}",
               'ExecReload' => '/bin/kill -HUP $MAINPID',
             },
             'Install' => {
@@ -126,7 +130,7 @@ module NetSnmp
             'Service' => {
               'Type' => 'simple',
               'ExecStartPre' => '/bin/mkdir -p /var/run/agentx',
-              'ExecStart' => "/usr/sbin/snmpd -LOw -u Debian-snmp -g Debian-snmp -I -smux,mteTrigger,mteTriggerConf -f -p /run/snmpd.pid -c #{config_file}",
+              'ExecStart' => "/usr/sbin/snmpd -LOw -u Debian-snmp -g Debian-snmp -I -smux,mteTrigger,mteTriggerConf -f -p /run/snmpd.pid -c #{snmp_config_dir}/#{snmpd_config_file},#{snmp_config_dir}/#{snmpd_config_user_file}",
               'ExecReload' => '/bin/kill -HUP $MAINPID',
             },
             'Install' => {

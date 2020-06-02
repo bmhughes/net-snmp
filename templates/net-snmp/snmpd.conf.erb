@@ -18,6 +18,13 @@
 <%= config %> <%= value %>
 <% end -%>
 <% end -%>
+<% unless nil_or_empty?(@dtls) -%>
+
+# DTLS Configuration
+<% @dtls.each do |config, value | -%>
+<%= config %> <%= value %>
+<% end -%>
+<% end -%>
 <% unless nil_or_empty?(@engine) -%>
 
 # SNMPv3 Engine Configuration
@@ -38,4 +45,18 @@
 <% @system.each do |config, value | -%>
 <%= config %> <%= value %>
 <% end -%>
+<% end -%>
+<% unless nil_or_empty?(@communities) -%>
+
+# Basic Access Control Configuration
+# Communities
+<% @communities.each do |community| -%>
+<%= snmp_community_access_builder(community) %>
+<% end -%>
+<% end -%>
+<% end -%>
+
+<% unless nil_or_empty?(@vacm) -%>
+
+# VACM Access Control Configuration
 <% end -%>

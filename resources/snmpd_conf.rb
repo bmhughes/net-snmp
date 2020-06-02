@@ -28,6 +28,9 @@ property :agentx, Hash,
           default: lazy { snmpd_default_config(:agentx) },
           description: 'AgentX SNMPd configuration'
 
+property :dtls, Hash,
+          description: 'DTLS SNMPd configuration'
+
 property :engine, Hash,
           description: 'SNMPv3 engine configuration'
 
@@ -44,10 +47,11 @@ property :additional_parameters, Hash,
 
 action :create do
   init_config_file_resource
-  
+
   config_file_resource.variables['agent'] = new_resource.agent
   config_file_resource.variables['agent'] = new_resource.agent
   config_file_resource.variables['agentx'] = new_resource.agentx
+  config_file_resource.variables['dtls'] = new_resource.dtls
   config_file_resource.variables['engine'] = new_resource.engine
   config_file_resource.variables['logging'] = new_resource.engine
   config_file_resource.variables['system'] = new_resource.system
