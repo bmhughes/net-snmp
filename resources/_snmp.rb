@@ -45,3 +45,5 @@ property :mode, String,
 action_class do
   include NetSnmp::Cookbook::ResourceHelpers
 end
+
+default_action :create
