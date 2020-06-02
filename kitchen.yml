@@ -26,7 +26,7 @@ platforms:
 suites:
   - name: default
     run_list:
-      - recipe[net_snmp::default]
+      - recipe[net_snmp_test::default]
     verifier:
       inspec_tests:
         - test/integration/default

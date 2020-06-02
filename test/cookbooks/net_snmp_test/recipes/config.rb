@@ -1,5 +1,5 @@
 #
-# Cookbook:: net_snmp
+# Cookbook:: net_snmp_test
 # Recipe:: package
 #
 # Copyright:: 2020, Ben Hughes
@@ -16,4 +16,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-net_snmp_package 'net-snmp'
+net_snmp_snmpd_conf 'snmpd' do
+  action :create
+end

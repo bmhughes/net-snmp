@@ -1,5 +1,5 @@
 #
-# Cookbook:: net_snmp
+# Cookbook:: net_snmp_test
 # Recipe:: default
 #
 # Copyright:: 2020, Ben Hughes
@@ -17,3 +17,4 @@
 # limitations under the License.
 
 include_recipe '::package'
+include_recipe '::config'
