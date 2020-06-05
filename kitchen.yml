@@ -1,14 +1,14 @@
 ---
 driver:
   name: vagrant
-  chef_version: current
+  chef_version: <%= ENV['CHEF_VERSION'] || 'current' %>
 
 provisioner:
   name: chef_zero
   always_update_cookbooks: true
   deprecations_as_errors: true
   chef_license: accept
-  chef_log_level: auto
+  chef_log_level: <%= ENV['CHEF_LOG_LEVEL'] || 'auto' %>
   product_name: chef
   product_version: latest
 
@@ -26,6 +26,7 @@ platforms:
 suites:
   - name: default
     run_list:
+      - recipe[net_snmp_test::net_setup]
       - recipe[net_snmp_test::default]
     verifier:
       inspec_tests:
