@@ -77,7 +77,11 @@ module NetSnmp
         end
       end
 
-      def snmpd_default_systemd_unit_content(config_file)
+      def snmpd_configuration_files
+        ::Dir.children(snmp_config_dir).filter { |file| /snmpd.*\.conf/.match?(file) }.each { |file| file.prepend("#{snmp_config_dir}/") }
+      end
+
+      def snmpd_default_systemd_unit_content(configuration_files)
         case node['platform']
         when 'amazon', 'centos', 'fedora', 'redhat'
           {
@@ -92,7 +96,7 @@ module NetSnmp
               'Type' => 'notify',
               'Environment' => 'OPTIONS="-LS0-6d"',
               'EnvironmentFile' => '-/etc/sysconfig/snmpd',
-              'ExecStart' => "/usr/sbin/snmpd $OPTIONS -f -c #{snmp_config_dir}/#{snmpd_config_file},#{snmp_config_dir}/#{snmpd_config_user_file}",
+              'ExecStart' => "/usr/sbin/snmpd $OPTIONS -f -c #{configuration_files.join(',')}",
               'ExecReload' => '/bin/kill -HUP $MAINPID',
             },
             'Install' => {

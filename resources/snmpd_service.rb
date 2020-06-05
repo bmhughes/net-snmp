@@ -24,8 +24,12 @@ property :service_name, String,
           description: 'Override the default service name'
 
 property :systemd_unit_content, [String, Hash],
-          default: lazy { snmpd_default_systemd_unit_content(config_file) },
+          default: lazy { snmpd_default_systemd_unit_content(config_files) },
           description: 'Override the systemd unit file contents'
+
+property :config_files, Array,
+          default: lazy { snmpd_configuration_files },
+          description: 'Configuration file to include in the unit definition'
 
 action_class do
   def do_service_action(service_action)
