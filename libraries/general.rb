@@ -78,7 +78,10 @@ module NetSnmp
       end
 
       def snmpd_configuration_files
-        ::Dir.children(snmp_config_dir).filter { |file| /snmpd(\..*)?\.conf/.match?(file) }.each { |file| file.prepend("#{snmp_config_dir}/") }
+        files = ::Dir.children(snmp_config_dir).filter { |file| /snmpd(\..*)?\.conf/.match?(file) }.each { |file| file.prepend("#{snmp_config_dir}/") }
+        files.push(node.run_state['snmpd_config_files']) unless nil_or_empty?(node.run_state['snmpd_config_files'])
+
+        files.flatten.uniq.sort
       end
 
       def snmpd_default_systemd_unit_content(configuration_files)

@@ -16,8 +16,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# To learn more about Custom Resources, see https://docs.chef.io/custom_resources.html
-
 use 'snmpd'
 
 property :agent, Hash,
@@ -45,8 +43,16 @@ property :system, Hash,
 property :additional_parameters, Hash,
           description: 'Additional configuration options'
 
+property :additional_config_files, Array,
+          description: 'Additional configuration files to include'
+
 action :create do
   init_config_file_resource
+
+  unless nil_or_empty?(new_resource.additional_config_files)
+    node.run_state['snmpd_config_files'] ||= []
+    node.run_state['snmpd_config_files'].push(new_resource.config_file) unless node.run_state['snmpd_config_files'].include?(new_resource.config_file)
+  end
 
   config_file_resource.variables['agent'] = new_resource.agent
   config_file_resource.variables['agent'] = new_resource.agent

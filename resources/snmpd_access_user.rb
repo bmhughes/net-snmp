@@ -63,6 +63,9 @@ property :engineid, String,
 action :create do
   init_config_file_resource
 
+  node.run_state['snmpd_config_files'] ||= []
+  node.run_state['snmpd_config_files'].push(new_resource.config_file) unless node.run_state['snmpd_config_files'].include?(new_resource.config_file)
+
   config_file_resource.variables['users'] ||= []
   config_file_resource.variables['users'].push(snmpd_access_property_set)
 end
