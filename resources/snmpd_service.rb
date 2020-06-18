@@ -44,18 +44,22 @@ end
 
 action :create do
   with_run_context :root do
+    do_service_action(:nothing)
     edit_resource(:systemd_unit, new_resource.service_name) do |new_resource|
       content new_resource.systemd_unit_content
       triggers_reload true
 
-      action :create
+      notifies :restart, "service[#{new_resource.service_name}]", :delayed
+
+      action :nothing
+      delayed_action :create
     end
   end
 end
 
 action :delete do
-  do_service_action([:stop, :disable])
   with_run_context :root do
+    do_service_action([:stop, :disable])
     edit_resource(:systemd_unit, new_resource.service_name).action(:delete)
   end
 end

@@ -51,7 +51,7 @@ module NetSnmp
         case section
         when :agent
           {
-            'agentaddress' => %w(udp:127.0.0.1:161 udp6:[::1]:161),
+            'agentaddress' => %w(udp:161 udp6:161),
             'agentuser' => default_net_snmp_user,
             'agentgroup' => default_net_snmp_group,
           }
@@ -78,7 +78,7 @@ module NetSnmp
       end
 
       def snmpd_configuration_files
-        ::Dir.children(snmp_config_dir).filter { |file| /snmpd.*\.conf/.match?(file) }.each { |file| file.prepend("#{snmp_config_dir}/") }
+        ::Dir.children(snmp_config_dir).filter { |file| /snmpd(\..*)?\.conf/.match?(file) }.each { |file| file.prepend("#{snmp_config_dir}/") }
       end
 
       def snmpd_default_systemd_unit_content(configuration_files)
@@ -96,7 +96,7 @@ module NetSnmp
               'Type' => 'notify',
               'Environment' => 'OPTIONS="-LS0-6d"',
               'EnvironmentFile' => '-/etc/sysconfig/snmpd',
-              'ExecStart' => "/usr/sbin/snmpd $OPTIONS -f -c #{configuration_files.join(',')}",
+              'ExecStart' => "/usr/sbin/snmpd $OPTIONS -f -C -c #{configuration_files.join(',')}",
               'ExecReload' => '/bin/kill -HUP $MAINPID',
             },
             'Install' => {
@@ -117,7 +117,7 @@ module NetSnmp
               ],
               'Type' => 'simple',
               'ExecStartPre' => '/bin/mkdir -p /var/run/agentx',
-              'ExecStart' => "/usr/sbin/snmpd -Lsd -Lf /dev/null -u Debian-snmp -g Debian-snmp -I -smux,mteTrigger,mteTriggerConf -f -p /run/snmpd.pid -c #{snmp_config_dir}/#{snmpd_config_file},#{snmp_config_dir}/#{snmpd_config_user_file}",
+              'ExecStart' => "/usr/sbin/snmpd -Lsd -Lf /dev/null -u Debian-snmp -g Debian-snmp -I -smux,mteTrigger,mteTriggerConf -f -p /run/snmpd.pid -C -c #{configuration_files.join(',')}",
               'ExecReload' => '/bin/kill -HUP $MAINPID',
             },
             'Install' => {
@@ -134,7 +134,7 @@ module NetSnmp
             'Service' => {
               'Type' => 'simple',
               'ExecStartPre' => '/bin/mkdir -p /var/run/agentx',
-              'ExecStart' => "/usr/sbin/snmpd -LOw -u Debian-snmp -g Debian-snmp -I -smux,mteTrigger,mteTriggerConf -f -p /run/snmpd.pid -c #{snmp_config_dir}/#{snmpd_config_file},#{snmp_config_dir}/#{snmpd_config_user_file}",
+              'ExecStart' => "/usr/sbin/snmpd -LOw -u Debian-snmp -g Debian-snmp -I -smux,mteTrigger,mteTriggerConf -f -p /run/snmpd.pid -C -c #{configuration_files.join(',')}",
               'ExecReload' => '/bin/kill -HUP $MAINPID',
             },
             'Install' => {
