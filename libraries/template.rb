@@ -56,12 +56,10 @@ module NetSnmp
         config_string.concat(type.to_s.ljust(12))
 
         snmpd_access_properties_all(type).each do |property|
-          next if nil_or_empty?(configuration[property])
-
           min_length = property.eql?('oid') ? 31 : 15
-          property_value = configuration[property].dup
+          property_value = configuration.fetch(property, ' ').dup
 
-          if %i(rouser rwuser rocommunity rwcommunity rocommunity6 rwcommunity6 com2sec com2sec6 com2secunix).include?(type)
+          if %i(rouser rwuser rocommunity rwcommunity rocommunity6 rwcommunity6 com2sec com2sec6 com2secunix).include?(type) && !property_value.eql?(' ')
             case property
             when 'secmodel', 'model'
               property_value.prepend('-s ')

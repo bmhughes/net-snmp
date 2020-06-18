@@ -35,7 +35,7 @@ property :community, String,
 property :sockpath, String,
           description: 'Socket path to use with com2secunix'
 
-property :security_name, String,
+property :secname, String,
           description: 'Group security name'
 
 property :secmodel, [Symbol, String],

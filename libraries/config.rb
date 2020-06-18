@@ -59,7 +59,7 @@ module NetSnmp
         when :group
           {
             join_method: 'push',
-            required: %w(name secmodel security_name),
+            required: %w(name secmodel secname),
             optional: [],
           }
         when :view

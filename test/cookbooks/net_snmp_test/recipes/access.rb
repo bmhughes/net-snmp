@@ -40,7 +40,7 @@ end
 net_snmp_snmpd_access_vacm 'notConfigGroup' do
   directive :group
   secmodel :v1
-  security_name 'notConfigUser'
+  secname 'notConfigUser'
 
   action :create
 end
@@ -48,7 +48,7 @@ end
 net_snmp_snmpd_access_vacm 'notConfigGroup' do
   directive :group
   secmodel :v2c
-  security_name 'notConfigUser'
+  secname 'notConfigUser'
 
   action :create
 end
