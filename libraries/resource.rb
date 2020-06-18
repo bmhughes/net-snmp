@@ -16,6 +16,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+include NetSnmp::Cookbook::GeneralHelpers
+include NetSnmp::Cookbook::ConfigHelpers
+
 module NetSnmp
   module Cookbook
     module ResourceHelpers
@@ -27,7 +30,39 @@ module NetSnmp
         find_resource!(:template, new_resource.config_file)
       end
 
+      def snmpd_access_property_set_valid?
+        property_set_valid?(snmpd_access_properties_required(new_resource.directive))
+      end
+
+      def snmpd_access_property_set
+        build_property_hash(snmpd_access_properties_all(new_resource.directive))
+      end
+
       private
+
+      def build_property_hash(properties)
+        property_hash = {}
+
+        properties.each do |property|
+          next if nil_or_empty?(new_resource.send(property))
+
+          property_hash[property] = new_resource.send(property).to_s
+        end
+
+        property_hash
+      end
+
+      def property_set_valid?(required_properties)
+        missing_properties = []
+
+        required_properties.each { |property| missing_properties.push(property) if nil_or_empty?(new_resource.send(property)) }
+
+        unless missing_properties.empty?
+          raise ArgumentError, "A #{new_resource.directive} directive requires the following properties to be specified that are nil or empty: #{missing_properties.join(', ')}".strip
+        end
+
+        true
+      end
 
       def config_file_resource_exist?
         begin

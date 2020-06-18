@@ -3,60 +3,85 @@
 # Do NOT modify this file, local modifications will be overwritten.
 #
 
-## net-snmp Server Configuration
+### net-snmp Server Configuration
 <% unless nil_or_empty?(@agent) -%>
 
-# Agent Configuration
+## Agent Configuration
 <% @agent.each do |config, value | -%>
+<% if value.is_a?(Array) -%>
+<%= config %> <%= value.join(',') %>
+<% else -%>
 <%= config %> <%= value %>
+<% end -%>
 <% end -%>
 <% end -%>
 <% unless nil_or_empty?(@agentx) -%>
 
-# AgentX Configuration
+## AgentX Configuration
 <% @agentx.each do |config, value | -%>
 <%= config %> <%= value %>
 <% end -%>
 <% end -%>
 <% unless nil_or_empty?(@dtls) -%>
 
-# DTLS Configuration
+## DTLS Configuration
 <% @dtls.each do |config, value | -%>
 <%= config %> <%= value %>
 <% end -%>
 <% end -%>
 <% unless nil_or_empty?(@engine) -%>
 
-# SNMPv3 Engine Configuration
+## SNMPv3 Engine Configuration
 <% @engine.each do |config, value | -%>
 <%= config %> <%= value %>
 <% end -%>
 <% end -%>
 <% unless nil_or_empty?(@logging) -%>
 
-# Logging Configuration
+## Logging Configuration
 <% @logging.each do |config, value | -%>
 <%= config %> <%= value %>
 <% end -%>
 <% end -%>
 <% unless nil_or_empty?(@system) -%>
 
-# System Configuration
+## System Configuration
 <% @system.each do |config, value | -%>
 <%= config %> <%= value %>
 <% end -%>
 <% end -%>
-<% unless nil_or_empty?(@communities) -%>
+<% unless nil_or_empty?(@basic) -%>
 
-# Basic Access Control Configuration
-# Communities
-<% @communities.each do |community| -%>
-<%= snmp_community_access_builder(community) %>
+## Basic Access Control Configuration
+<% @basic.each do |type, configurations| -%>
+# <%= type %>
+<%= snmpd_access_title_line(type) %>
+<% configurations.each do |configuration| -%>
+<%= snmpd_access_builder(type, configuration) %>
 <% end -%>
 <% end -%>
 <% end -%>
-
 <% unless nil_or_empty?(@vacm) -%>
 
-# VACM Access Control Configuration
+## VACM Access Control Configuration
+<% @vacm.each do |type, configurations| -%>
+# <%= type %>
+<%= snmpd_access_title_line(type) %>
+<% configurations.each do |configuration| -%>
+<%= snmpd_access_builder(type, configuration) %>
+<% end -%>
+
+<% end -%>
+<% end -%>
+<% unless nil_or_empty?(@typed) -%>
+
+## Typed-View Access Control Configuration
+<% @typed.each do |type, configurations| -%>
+# <%= type %>
+<%= snmpd_access_title_line(type) %>
+<% configurations.each do |configuration| -%>
+<%= snmpd_access_builder(type, configuration) %>
+<% end -%>
+
+<% end -%>
 <% end -%>

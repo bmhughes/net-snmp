@@ -9,12 +9,8 @@
 # User Configuration
 # Users
 <% @users.each do |user| -%>
-<%= snmpv3_user_builder(user) %>
+<%= snmpd_access_title_line(:createuser) %>
+<%= snmpd_access_user_builder(user) %>
 <% end -%>
 
-# Basic Access Control Configuration
-# Users
-<% @users.each do |user| -%>
-<%= snmp_user_access_builder(user) %>
-<% end -%>
 <% end -%>

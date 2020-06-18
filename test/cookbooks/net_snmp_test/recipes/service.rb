@@ -1,6 +1,6 @@
 #
 # Cookbook:: net_snmp_test
-# Recipe:: default
+# Recipe:: service
 #
 # Copyright:: Ben Hughes <bmhughes@bmhughes.co.uk>
 #
@@ -16,8 +16,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-include_recipe '::package'
-include_recipe '::config'
-include_recipe '::access'
-
-include_recipe '::service'
+net_snmp_snmpd_service 'snmpd' do
+  action [:create, :enable, :start]
+end

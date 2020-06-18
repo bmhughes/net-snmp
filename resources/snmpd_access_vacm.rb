@@ -1,6 +1,6 @@
 #
 # Cookbook:: net_snmp
-# Resource:: snmpd_vacm
+# Resource:: snmpd_access_vacm
 #
 # Copyright:: Ben Hughes <bmhughes@bmhughes.co.uk>
 #
@@ -18,41 +18,38 @@
 
 use 'snmpd'
 
+include NetSnmp::Cookbook::ResourceHelpers
+
 property :directive, [Symbol, String],
-          equal_to: %i(com2sec com2sec6 com2secunix group view access),
+          required: true,
+          equal_to: %i(com2sec com2sec6 com2secunix group view access authcommunity authuser authgroup authaccess setaccess),
           description: 'The SNMPd VACM configuration statement to declare, see snmpd.conf(5).',
           coerce: proc { |p| p.is_a?(Symbol) ? p : p.to_sym }
-
-property :secname, String,
-          description: 'Security name'
 
 property :source, String,
           description: 'Source as an IPv4/IPv6 address and netmask or prefix'
 
 property :community, String,
-          descirption: 'SNMP community string'
+          description: 'SNMP community string'
 
 property :sockpath, String,
           description: 'Socket path to use with com2secunix'
 
-property :group, String,
-          description: 'Group name string'
+property :security_name, String,
+          description: 'Group security name'
 
-property :security_model, [Symbol, String],
-          equal_to: %i(v1 v2c usm tsm ksm),
+property :secmodel, [Symbol, String],
+          equal_to: %i(any v1 v2c usm tsm ksm),
           description: 'SNMP security model',
           coerce: proc { |p| p.is_a?(Symbol) ? p : p.to_sym }
-
-property :view, String,
-          description: 'SNMP view name'
 
 property :view_type, [Symbol, String],
           equal_to: %i(included excluded),
           description: 'SNMP view type',
           coerce: proc { |p| p.is_a?(Symbol) ? p : p.to_sym }
 
-property :oid, String,
-          description: 'View OID tree base'
+property :subtree, String,
+          description: 'View OID subtree base'
 
 property :mask, String,
           description: 'View OID mask'
@@ -67,14 +64,26 @@ property :prefix, String,
           description: 'Access prefix'
 
 property :read, String,
+          default: 'none',
           description: 'Access read view'
 
 property :write, String,
+          default: 'none',
           description: 'Access write view'
 
 property :notify, String,
+          default: 'none',
           description: 'Access notify view'
 
+action_class do
+  include NetSnmp::Cookbook::ResourceHelpers
+end
+
 action :create do
-  #stuff
+  init_config_file_resource
+  snmpd_access_property_set_valid?
+
+  config_file_resource.variables['vacm'] ||= {}
+  config_file_resource.variables['vacm'][new_resource.directive] ||= []
+  config_file_resource.variables['vacm'][new_resource.directive].push(snmpd_access_property_set)
 end

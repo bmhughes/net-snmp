@@ -16,40 +16,74 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+include NetSnmp::Cookbook::ConfigHelpers
+
 module NetSnmp
   module Cookbook
     module TemplateHelpers
-      def snmpv3_user_builder(user)
+      def snmpd_access_user_builder(user)
         user_string = 'createUser '
         user_string.concat("#{user['user']} ")
-        user_string.concat("#{user['authentication']} ") if user['authentication']
+        user_string.concat("#{user['authentication'].upcase} ") if user['authentication']
         user_string.concat("#{user['authpassphrase']} ") if user['authpassphrase']
-        user_string.concat("#{user['privacy']} ") if user['privacy']
+        user_string.concat("#{user['privacy'].upcase} ") if user['privacy']
         user_string.concat("#{user['privacypassphrase']} ") if user['privacypassphrase']
 
         user_string.strip
       end
 
-      def snmp_user_access_builder(user)
-        user_string = "#{user['access']} "
-        user_string.concat("#{user['user']} ")
-        user_string.concat("#{user['security']} ") if user['security']
-        user_string.concat("#{user['oid']} ") if user['oid']
-        user_string.concat("-V #{user['view']} ") if user['view']
-        user_string.concat("-V #{user['view_context']} ") if user['view'] && user['view_context']
+      def snmpd_access_basic_user_builder(configuration)
+        user_string = "#{configuration['access']} "
+        user_string.concat("#{configuration['user']} ")
+        user_string.concat("#{configuration['security']} ") if configuration['security']
+        user_string.concat("#{configuration['oid']} ") if configuration['oid']
+        user_string.concat("-V #{configuration['view']} ") if configuration['view']
+        user_string.concat("-V #{configuration['view_context']} ") if configuration['view'] && configuration['view_context']
 
         user_string.strip
       end
 
-      def snmp_community_access_builder(community)
-        community_string = "#{community['access']} "
-        community_string.concat("#{community['name']} ")
-        community_string.concat("#{community['source']} ") if community['security']
-        community_string.concat("#{community['oid']} ") if community['oid']
-        community_string.concat("-V #{community['view']} ") if community['view']
-        community_string.concat("-V #{community['view_context']} ") if community['view'] && community['view_context']
+      def snmpd_access_title_line(type)
+        title_line = '##'.ljust(12)
 
-        community_string.strip
+        snmpd_access_properties_all(type).each { |property| title_line.concat(property.ljust(property.eql?('oid') ? 32 : 16)) }
+
+        title_line
+      end
+
+      def snmpd_access_builder(type, configuration)
+        config_string = ''
+        config_string.concat(type.to_s.ljust(12))
+
+        snmpd_access_properties_all(type).each do |property|
+          next if nil_or_empty?(configuration[property])
+
+          min_length = property.eql?('oid') ? 31 : 15
+          property_value = configuration[property].dup
+
+          if %i(rouser rwuser rocommunity rwcommunity rocommunity6 rwcommunity6 com2sec com2sec6 com2secunix).include?(type)
+            case property
+            when 'secmodel', 'model'
+              property_value.prepend('-s ')
+            when 'context'
+              property_value.prepend('-Cn ')
+            when 'view'
+              property_value.prepend('-V ')
+            end
+          end
+
+          config_string.concat(template_format_string(property_value, min_length))
+        end
+
+        config_string.strip
+      end
+
+      private
+
+      def template_format_string(string, min_length)
+        return "#{' '.ljust(min_length)} " if nil_or_empty?(string)
+
+        "#{string.ljust(min_length)} "
       end
     end
   end
