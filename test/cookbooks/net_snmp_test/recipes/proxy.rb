@@ -1,6 +1,6 @@
 #
 # Cookbook:: net_snmp_test
-# Recipe:: default
+# Recipe:: proxy
 #
 # Copyright:: Ben Hughes <bmhughes@bmhughes.co.uk>
 #
@@ -16,11 +16,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-include_recipe '::package'
-include_recipe '::config'
-include_recipe '::access'
-include_recipe '::extend'
-include_recipe '::override'
-include_recipe '::proxy'
-
-include_recipe '::service'
+net_snmp_snmpd_proxy 'Test Proxy' do
+  host '127.0.0.127'
+  oid '.1.2.3'
+end

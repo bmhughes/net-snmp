@@ -1,8 +1,8 @@
 #
-# Cookbook:: net_snmp_test
-# Recipe:: default
+# Cookbook:: net_snmp
+# Resource:: snmpd_proxy
 #
-# Copyright:: Ben Hughes <bmhughes@bmhughes.co.uk>
+# Copyright:: 2020, Ben Hughes
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -16,11 +16,21 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-include_recipe '::package'
-include_recipe '::config'
-include_recipe '::access'
-include_recipe '::extend'
-include_recipe '::override'
-include_recipe '::proxy'
+use 'snmpd'
 
-include_recipe '::service'
+property :context, String
+
+property :snmp_command_arguments, String
+
+property :host, String
+
+property :oid, String
+
+property :remote_oid, String
+
+action :create do
+  init_config_file_resource
+
+  config_file_resource.variables['proxy'] ||= []
+  config_file_resource.variables['proxy'].push(resource_property_set)
+end

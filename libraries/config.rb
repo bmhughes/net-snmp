@@ -29,6 +29,8 @@ module NetSnmp
           snmpd_extend_properties(new_resource.type, set)
         when :net_snmp_snmpd_override
           snmpd_override_properties(set)
+        when :net_snmp_snmpd_proxy
+          snmpd_proxy_properties(set)
         else
           raise ArgumentError, "snmpd_properties: Unknown resource type :#{new_resource.declared_type}"
         end
@@ -150,6 +152,17 @@ module NetSnmp
         p = {
           required: %w(oid type value),
           optional: %(rw),
+        }
+
+        return p[:required] if set.eql?(:required)
+
+        p[:required].push(p[:optional]).flatten.compact
+      end
+
+      def snmpd_proxy_properties(set)
+        p = {
+          required: %w(host oid),
+          optional: %w(context snmp_command_arguments remote_oid),
         }
 
         return p[:required] if set.eql?(:required)

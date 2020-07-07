@@ -109,6 +109,13 @@ dlmod <%= name %> <%= path %>
 override<% if configuration['rw'] -%> -rw<% end -%> <%= configuration['oid'] -%> <%= configuration['type'] -%> <%= configuration['value'] -%>
 <% end -%>
 <% end -%>
+<% unless nil_or_empty?(@proxy) -%>
+
+## Proxy OID Configuration
+<% @proxy.each do |configuration| -%>
+proxy<% if configuration['context'] -%> -Cn <%= configuration['context'] -%><% end -%> <%= configuration['snmp_command_arguments'] -%> <%= configuration['host'] -%> <%= configuration['oid'] -%> <%= configuration['remote_oid'] -%>
+<% end -%>
+<% end -%>
 <% unless nil_or_empty?(@additional_parameters) -%>
 
 ## Additional Configuration
