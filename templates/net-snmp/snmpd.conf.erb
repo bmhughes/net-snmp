@@ -50,6 +50,13 @@
 <%= config %> <%= value %>
 <% end -%>
 <% end -%>
+<% unless nil_or_empty?(@dlmod) -%>
+
+## Dynamically Loadable Modules
+<% @dlmod.each do |name, path | -%>
+dlmod <%= name %> <%= path %>
+<% end -%>
+<% end -%>
 <% unless nil_or_empty?(@basic) -%>
 
 ## Basic Access Control Configuration

@@ -40,6 +40,9 @@ property :system, Hash,
           default: lazy { snmpd_default_config(:system) },
           description: 'System SNMPd configuration'
 
+property :dlmod, Hash,
+          description: 'Dynamically loadable modules'
+
 property :additional_parameters, Hash,
           description: 'Additional configuration options'
 
@@ -61,6 +64,8 @@ action :create do
   config_file_resource.variables['engine'] = new_resource.engine
   config_file_resource.variables['logging'] = new_resource.logging
   config_file_resource.variables['system'] = new_resource.system
+  config_file_resource.variables['dlmod'] = new_resource.dlmod
+  config_file_resource.variables['additional_parameters'] = new_resource.additional_parameters
 end
 
 action :delete do
