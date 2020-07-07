@@ -30,12 +30,9 @@ module NetSnmp
         find_resource!(:template, new_resource.config_file)
       end
 
-      def snmpd_access_property_set_valid?
-        property_set_valid?(snmpd_access_properties_required(new_resource.directive))
-      end
-
-      def snmpd_access_property_set
-        build_property_hash(snmpd_access_properties_all(new_resource.directive))
+      def resource_property_set
+        property_set_valid?(snmpd_properties(:required))
+        build_property_hash(snmpd_properties(:all))
       end
 
       private
@@ -46,7 +43,7 @@ module NetSnmp
         properties.each do |property|
           next if nil_or_empty?(new_resource.send(property))
 
-          property_hash[property] = new_resource.send(property).to_s
+          property_hash[property] = new_resource.send(property).is_a?(Symbol) ? new_resource.send(property).to_s : new_resource.send(property)
         end
 
         property_hash
@@ -58,7 +55,7 @@ module NetSnmp
         required_properties.each { |property| missing_properties.push(property) if nil_or_empty?(new_resource.send(property)) }
 
         unless missing_properties.empty?
-          raise ArgumentError, "A #{new_resource.directive} directive requires the following properties to be specified that are nil or empty: #{missing_properties.join(', ')}".strip
+          raise ArgumentError, "A #{new_resource.declared_type} resource requires the following properties to be specified that are nil or empty: #{missing_properties.join(', ')}".strip
         end
 
         true

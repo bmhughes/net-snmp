@@ -1,6 +1,6 @@
 #
 # Cookbook:: net_snmp_test
-# Recipe:: service
+# Recipe:: extend
 #
 # Copyright:: Ben Hughes <bmhughes@bmhughes.co.uk>
 #
@@ -16,7 +16,14 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-net_snmp_snmpd_service 'snmpd' do
-  action [:create, :enable, :start]
-  subscribes :restart, 'template[/etc/snmp/snmpd.conf]', :delayed
+net_snmp_snmpd_extend 'distro' do
+  type :extend
+  miboid '.1.3.6.1.4.1.2021.7890.1'
+  program '/usr/bin/distro'
+end
+
+net_snmp_snmpd_extend 'pass_test' do
+  type :pass
+  miboid '.1.3.6.1.4.1.2022.7890.1'
+  program '/usr/bin/pass_test'
 end

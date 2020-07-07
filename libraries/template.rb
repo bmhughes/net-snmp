@@ -43,23 +43,23 @@ module NetSnmp
         user_string.strip
       end
 
-      def snmpd_access_title_line(type)
+      def snmpd_access_title_line(directive)
         title_line = '##'.ljust(12)
 
-        snmpd_access_properties_all(type).each { |property| title_line.concat(property.ljust(property.eql?('oid') ? 32 : 16)) }
+        snmpd_access_properties(directive, :all).each { |property| title_line.concat(property.ljust(property.eql?('oid') ? 32 : 16)) }
 
         title_line
       end
 
-      def snmpd_access_builder(type, configuration)
+      def snmpd_access_builder(directive, configuration)
         config_string = ''
-        config_string.concat(type.to_s.ljust(12))
+        config_string.concat(directive.to_s.ljust(12))
 
-        snmpd_access_properties_all(type).each do |property|
+        snmpd_access_properties(directive, :all).each do |property|
           min_length = property.eql?('oid') ? 31 : 15
           property_value = configuration.fetch(property, ' ').dup
 
-          if %i(rouser rwuser rocommunity rwcommunity rocommunity6 rwcommunity6 com2sec com2sec6 com2secunix).include?(type) && !property_value.eql?(' ')
+          if %i(rouser rwuser rocommunity rwcommunity rocommunity6 rwcommunity6 com2sec com2sec6 com2secunix).include?(directive) && !property_value.eql?(' ')
             case property
             when 'secmodel', 'model'
               property_value.prepend('-s ')

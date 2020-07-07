@@ -59,7 +59,7 @@ action :create do
   config_file_resource.variables['agentx'] = new_resource.agentx
   config_file_resource.variables['dtls'] = new_resource.dtls
   config_file_resource.variables['engine'] = new_resource.engine
-  config_file_resource.variables['logging'] = new_resource.engine
+  config_file_resource.variables['logging'] = new_resource.logging
   config_file_resource.variables['system'] = new_resource.system
 end
 

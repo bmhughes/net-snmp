@@ -51,5 +51,5 @@ action :create do
 
   config_file_resource.variables['basic'] ||= {}
   config_file_resource.variables['basic'][new_resource.directive] ||= []
-  config_file_resource.variables['basic'][new_resource.directive].push(snmpd_access_property_set)
+  config_file_resource.variables['basic'][new_resource.directive].push(resource_property_set)
 end

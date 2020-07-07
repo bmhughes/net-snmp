@@ -1,6 +1,6 @@
 #
 # Cookbook:: net_snmp_test
-# Recipe:: service
+# Recipe:: override
 #
 # Copyright:: Ben Hughes <bmhughes@bmhughes.co.uk>
 #
@@ -16,7 +16,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-net_snmp_snmpd_service 'snmpd' do
-  action [:create, :enable, :start]
-  subscribes :restart, 'template[/etc/snmp/snmpd.conf]', :delayed
+net_snmp_snmpd_override 'sysDescr.0' do
+  type 'octet_str'
+  value 'Overriden sysDescr'
 end

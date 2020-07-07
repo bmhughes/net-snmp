@@ -67,7 +67,7 @@ action :create do
   node.run_state['snmpd_config_files'].push(new_resource.config_file) unless node.run_state['snmpd_config_files'].include?(new_resource.config_file)
 
   config_file_resource.variables['users'] ||= []
-  config_file_resource.variables['users'].push(snmpd_access_property_set)
+  config_file_resource.variables['users'].push(resource_property_set)
 end
 
 # action :delete do

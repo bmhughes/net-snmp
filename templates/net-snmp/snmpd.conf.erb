@@ -53,22 +53,22 @@
 <% unless nil_or_empty?(@basic) -%>
 
 ## Basic Access Control Configuration
-<% @basic.each do |type, configurations| -%>
-# <%= type %>
-<%= snmpd_access_title_line(type) %>
+<% @basic.each do |directive, configurations| -%>
+# <%= directive %>
+<%= snmpd_access_title_line(directive) %>
 <% configurations.each do |configuration| -%>
-<%= snmpd_access_builder(type, configuration) %>
+<%= snmpd_access_builder(directive, configuration) %>
 <% end -%>
 <% end -%>
 <% end -%>
 <% unless nil_or_empty?(@vacm) -%>
 
 ## VACM Access Control Configuration
-<% @vacm.each do |type, configurations| -%>
-# <%= type %>
-<%= snmpd_access_title_line(type) %>
+<% @vacm.each do |directive, configurations| -%>
+# <%= directive %>
+<%= snmpd_access_title_line(directive) %>
 <% configurations.each do |configuration| -%>
-<%= snmpd_access_builder(type, configuration) %>
+<%= snmpd_access_builder(directive, configuration) %>
 <% end -%>
 
 <% end -%>
@@ -76,12 +76,36 @@
 <% unless nil_or_empty?(@typed) -%>
 
 ## Typed-View Access Control Configuration
-<% @typed.each do |type, configurations| -%>
-# <%= type %>
-<%= snmpd_access_title_line(type) %>
+<% @typed.each do |directive, configurations| -%>
+# <%= directive %>
+<%= snmpd_access_title_line(directive) %>
 <% configurations.each do |configuration| -%>
-<%= snmpd_access_builder(type, configuration) %>
+<%= snmpd_access_builder(directive, configuration) %>
 <% end -%>
 
+<% end -%>
+<% end -%>
+<% unless nil_or_empty?(@extend) -%>
+
+## Extend Configuration
+<% @extend.each do |method, configurations| -%>
+# <%= method %>
+<% configurations.each do |configuration| -%>
+<%= method %><% if configuration['miboid'] -%> <%=configuration['miboid'] -%><% end -%> <%= configuration['name'] -%> <%= configuration['program'] -%> <%= configuration['arguments'] -%>
+<% end -%>
+<% end -%>
+<% end -%>
+<% unless nil_or_empty?(@override) -%>
+
+## Override OID Configuration
+<% @override.each do |oid, configuration| -%>
+override<% if configuration['rw'] -%> -rw<% end -%> <%= configuration['oid'] -%> <%= configuration['type'] -%> <%= configuration['value'] -%>
+<% end -%>
+<% end -%>
+<% unless nil_or_empty?(@additional_parameters) -%>
+
+## Additional Configuration
+<% @additional_parameters.each do |config, value | -%>
+<%= config %> <%= value %>
 <% end -%>
 <% end -%>

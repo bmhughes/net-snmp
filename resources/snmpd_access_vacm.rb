@@ -81,9 +81,8 @@ end
 
 action :create do
   init_config_file_resource
-  snmpd_access_property_set_valid?
 
   config_file_resource.variables['vacm'] ||= {}
   config_file_resource.variables['vacm'][new_resource.directive] ||= []
-  config_file_resource.variables['vacm'][new_resource.directive].push(snmpd_access_property_set)
+  config_file_resource.variables['vacm'][new_resource.directive].push(resource_property_set)
 end

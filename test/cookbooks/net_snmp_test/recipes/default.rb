@@ -19,5 +19,7 @@
 include_recipe '::package'
 include_recipe '::config'
 include_recipe '::access'
+include_recipe '::extend'
+include_recipe '::override'
 
 include_recipe '::service'
