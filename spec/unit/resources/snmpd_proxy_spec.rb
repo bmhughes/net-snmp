@@ -1,6 +1,6 @@
 #
 # Cookbook:: net_snmp
-# Spec:: default
+# Spec:: destination_spec
 #
 # Copyright:: Ben Hughes <bmhughes@bmhughes.co.uk>
 #
@@ -18,22 +18,21 @@
 
 require 'spec_helper'
 
-# For a complete list of available platforms and versions see:
-# https://github.com/customink/fauxhai/blob/master/PLATFORMS.md
+describe 'net_snmp_snmpd_config' do
+  step_into :net_snmp_snmpd_proxy
+  platform 'centos'
 
-describe 'net_snmp::default' do
-  platforms = {
-    'CentOS' => '8',
-    'Fedora' => '31',
-  }
-
-  platforms.each do |platform, version|
-    context "With net_snmp::default, on #{platform} #{version}" do
-      let(:chef_run) { ChefSpec::SoloRunner.new(platform: platform.dup.downcase!, version: version).converge(described_recipe) }
-
-      it 'converges successfully' do
-        expect { chef_run }.to_not raise_error
+  context 'Create net-snmp snmpd configuration file override' do
+    recipe do
+      net_snmp_snmpd_proxy 'Test Proxy' do
+        host '127.0.0.127'
+        oid '.1.2.3'
       end
+    end
+
+    it 'Creates the global configuration file override correctly' do
+      is_expected.to render_file('/etc/snmp/snmpd.conf')
+        .with_content(/proxy  127.0.0.127 .1.2.3/)
     end
   end
 end

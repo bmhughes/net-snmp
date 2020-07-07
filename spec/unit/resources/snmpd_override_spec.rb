@@ -1,6 +1,6 @@
 #
 # Cookbook:: net_snmp
-# Spec:: package
+# Spec:: destination_spec
 #
 # Copyright:: Ben Hughes <bmhughes@bmhughes.co.uk>
 #
@@ -18,17 +18,21 @@
 
 require 'spec_helper'
 
-describe 'net_snmp::package' do
+describe 'net_snmp_snmpd_config' do
+  step_into :net_snmp_snmpd_override
   platform 'centos'
-  step_into :net_snmp_package
 
-  context 'Install the net-snmp packages' do
-    describe 'Installs net-snmp package' do
-      it { is_expected.to install_package('net-snmp') }
+  context 'Create net-snmp snmpd configuration file override' do
+    recipe do
+      net_snmp_snmpd_override 'sysDescr.0' do
+        type 'octet_str'
+        value 'Overriden sysDescr'
+      end
     end
 
-    describe 'Installs net-snmp-utils package' do
-      it { is_expected.to install_package('net-snmp-utils') }
+    it 'Creates the global configuration file override correctly' do
+      is_expected.to render_file('/etc/snmp/snmpd.conf')
+        .with_content(/override sysDescr.0 octet_str "Overriden sysDescr"/)
     end
   end
 end
