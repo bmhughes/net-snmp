@@ -42,9 +42,9 @@ module NetSnmp
         p = case directive
             when :rouser, :rwuser
               {
-                join_method: 'push',
-                required: %w(secmodel name),
-                optional: %w(security oid view view_context),
+                join_method: 'zip',
+                required: [ nil, 'name', nil, nil, nil ],
+                optional: %w(secmodel security oid view view_context),
               }
             when :rocommunity, :rwcommunity, :rocommunity6, :rwcommunity6
               {
@@ -61,8 +61,8 @@ module NetSnmp
             when :com2secunix
               {
                 join_method: 'zip',
-                required: %w(name sockpath community),
-                optional: ['context', nil, nil],
+                required: [nil, 'name', 'sockpath', 'community'],
+                optional: ['context', nil, nil, nil],
               }
             when :group
               {
