@@ -92,9 +92,9 @@ describe 'net_snmp_snmpd_config' do
 
     it 'Creates the global configuration file with access correctly' do
       is_expected.to render_file('/etc/snmp/snmpd.conf')
-        .with_content(/rouser      -s usm          testuser        priv/)
-        .with_content(/group       notConfigGroup  v1              notConfigUser/)
-        .with_content(/access      notConfigGroup  ""              any             noauth          exact           systemview      none            none/)
+        .with_content(/rouser          -s usm          testuser        priv/)
+        .with_content(/group           notConfigGroup  v1              notConfigUser/)
+        .with_content(/access          notConfigGroup  ""              any             noauth          exact           systemview      none            none/)
     end
   end
 end

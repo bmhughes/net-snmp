@@ -22,12 +22,12 @@ module NetSnmp
   module Cookbook
     module TemplateHelpers
       def snmpd_access_user_builder(user)
-        user_string = 'createUser '
-        user_string.concat("#{user['user']} ")
-        user_string.concat("#{user['authentication'].upcase} ") if user['authentication']
-        user_string.concat("#{user['authpassphrase']} ") if user['authpassphrase']
-        user_string.concat("#{user['privacy'].upcase} ") if user['privacy']
-        user_string.concat("#{user['privacypassphrase']} ") if user['privacypassphrase']
+        user_string = template_format_string('createUser', 15)
+        user_string.concat(template_format_string("#{user['user']} ", 15))
+        user_string.concat(template_format_string("#{user['authentication'].upcase} ", 15)) if user['authentication']
+        user_string.concat(template_format_string("#{user['authpassphrase']} ", 31)) if user['authpassphrase']
+        user_string.concat(template_format_string("#{user['privacy'].upcase} ", 15)) if user['privacy']
+        user_string.concat(template_format_string("#{user['privacypassphrase']} ", 31)) if user['privacypassphrase']
 
         user_string.strip
       end
@@ -44,19 +44,22 @@ module NetSnmp
       end
 
       def snmpd_access_title_line(directive)
-        title_line = '##'.ljust(12)
+        title_line = '##'.ljust(16)
 
-        snmpd_access_properties(directive, :all).each { |property| title_line.concat(property.ljust(property.eql?('oid') ? 32 : 16)) }
+        snmpd_access_properties(directive, :all).each do |property|
+          min_length = %w(oid authpassphrase privacypassphrase).include?(property) ? 31 : 15
+          title_line.concat(template_format_string(property, min_length))
+        end
 
         title_line
       end
 
       def snmpd_access_builder(directive, configuration)
         config_string = ''
-        config_string.concat(directive.to_s.ljust(12))
+        config_string.concat(directive.to_s.ljust(16))
 
         snmpd_access_properties(directive, :all).each do |property|
-          min_length = property.eql?('oid') ? 31 : 15
+          min_length = %w(oid authpassphrase privacypassphrase).include?(property) ? 31 : 15
           property_value = configuration.fetch(property, ' ').dup
 
           if %i(rouser rwuser rocommunity rwcommunity rocommunity6 rwcommunity6 com2sec com2sec6 com2secunix).include?(directive) && !property_value.eql?(' ')
