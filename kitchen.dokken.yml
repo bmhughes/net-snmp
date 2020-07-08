@@ -20,8 +20,6 @@ platforms:
        - RUN /usr/bin/yum makecache -y -q
        - RUN /usr/bin/yum install rsync -y
        - RUN /usr/bin/yum install libselinux-utils -y
-    volumes:
-      - /tmp/gitlab-runner-artifacts:/var/gitlab-runner-artifacts
 - name: centos-8
   driver:
     image: dokken/centos-8
@@ -30,8 +28,6 @@ platforms:
        - RUN /usr/bin/yum makecache -y -q
        - RUN /usr/bin/yum install rsync -y
        - RUN /usr/bin/yum install libselinux-utils -y
-    volumes:
-      - /tmp/gitlab-runner-artifacts:/var/gitlab-runner-artifacts
 - name: fedora-31
   driver:
     image: dokken/fedora-31
@@ -40,8 +36,6 @@ platforms:
        - RUN /usr/bin/yum makecache -y -q
        - RUN /usr/bin/yum install rsync -y
        - RUN /usr/bin/yum install libselinux-utils -y
-    volumes:
-      - /tmp/gitlab-runner-artifacts:/var/gitlab-runner-artifacts
 - name: ubuntu-18.04
   driver:
     image: dokken/ubuntu-18.04
