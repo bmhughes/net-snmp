@@ -30,7 +30,7 @@ property :sensitive, [true, false],
           default: true,
           description: 'Set sensitive true by default for user configuration file'
 
-property :directive,
+property :directive, [Symbol, String],
           equal_to: %i(createuser),
           default: :createuser,
           description: 'Do not change me'
