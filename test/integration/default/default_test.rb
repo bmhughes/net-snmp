@@ -16,5 +16,31 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# The InSpec reference, with examples and extensive documentation, can be
-# found at http://inspec.io/docs/reference/resources/
+describe service('snmpd') do
+  it { should be_installed }
+  it { should be_enabled }
+  it { should be_running }
+end
+
+describe directory('/etc/snmp') do
+  it { should exist }
+end
+
+describe file('/etc/snmp/snmp.conf') do
+  it { should exist }
+  its('type') { should cmp 'file' }
+  it { should be_file }
+  it { should_not be_directory }
+end
+
+describe file('/etc/snmp/snmpd.conf') do
+  it { should exist }
+  its('type') { should cmp 'file' }
+  it { should be_file }
+  it { should_not be_directory }
+end
+
+describe port(161) do
+  it { should be_listening }
+  its('processes') { should include 'snmpd' }
+end
