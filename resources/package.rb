@@ -24,6 +24,14 @@ property :packages, [String, Array],
 
 action_class do
   def do_action(package_action)
+    if platform?('debian')
+      apt_repository 'non-free' do
+        uri 'http://deb.debian.org/debian'
+        components ['non-free']
+        action :add
+      end
+    end
+
     new_resource.packages.each do |pkg|
       package pkg do
         action package_action

@@ -24,7 +24,7 @@ module NetSnmp
         when 'rhel', 'fedora'
           %w(net-snmp net-snmp-agent-libs net-snmp-devel net-snmp-libs net-snmp-utils)
         when 'debian'
-          %w(snmp snmpd snmptrapd)
+          %w(snmp snmpd snmptrapd snmp-mibs-downloader)
         else
           raise "Platform family #{node['platform_family']} is not supported"
         end
