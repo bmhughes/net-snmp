@@ -1,6 +1,6 @@
 #
 # Cookbook:: net_snmp
-# Resource:: snmp_conf
+# Resource:: _snmpd (Partial)
 #
 # Copyright:: Ben Hughes <bmhughes@bmhughes.co.uk>
 #
