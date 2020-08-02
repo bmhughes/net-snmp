@@ -1,8 +1,8 @@
 #
-# Cookbook:: net_snmp
-# Recipe:: default
+# Cookbook:: net_snmp_test
+# Recipe:: proxy
 #
-# Copyright:: 2020, Ben Hughes
+# Copyright:: Ben Hughes <bmhughes@bmhughes.co.uk>
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -15,3 +15,8 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+
+net_snmp_snmpd_proxy 'Test Proxy' do
+  host '127.0.0.127'
+  oid '.1.2.3'
+end

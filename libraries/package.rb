@@ -1,6 +1,6 @@
 #
 # Cookbook:: net_snmp
-# Spec:: default
+# Library:: package
 #
 # Copyright:: Ben Hughes <bmhughes@bmhughes.co.uk>
 #
@@ -16,31 +16,19 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-describe service('snmpd') do
-  it { should be_installed }
-  it { should be_enabled }
-  it { should be_running }
-end
-
-describe directory('/etc/snmp') do
-  it { should exist }
-end
-
-describe file('/etc/snmp/snmp.conf') do
-  it { should exist }
-  its('type') { should cmp 'file' }
-  it { should be_file }
-  it { should_not be_directory }
-end
-
-describe file('/etc/snmp/snmpd.conf') do
-  it { should exist }
-  its('type') { should cmp 'file' }
-  it { should be_file }
-  it { should_not be_directory }
-end
-
-describe port(161) do
-  it { should be_listening }
-  its('processes') { should include 'snmpd' }
+module NetSnmp
+  module Cookbook
+    module PackageHelpers
+      def default_net_snmp_packages
+        case node['platform_family']
+        when 'rhel', 'fedora'
+          %w(net-snmp net-snmp-agent-libs net-snmp-devel net-snmp-libs net-snmp-utils)
+        when 'debian'
+          %w(snmp snmpd snmptrapd snmp-mibs-downloader)
+        else
+          raise "Platform family #{node['platform_family']} is not supported"
+        end
+      end
+    end
+  end
 end

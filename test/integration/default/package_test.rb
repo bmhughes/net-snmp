@@ -1,6 +1,6 @@
 #
 # Cookbook:: net_snmp
-# Spec:: default
+# Spec:: package
 #
 # Copyright:: Ben Hughes <bmhughes@bmhughes.co.uk>
 #
@@ -16,31 +16,17 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-describe service('snmpd') do
-  it { should be_installed }
-  it { should be_enabled }
-  it { should be_running }
-end
-
-describe directory('/etc/snmp') do
-  it { should exist }
-end
-
-describe file('/etc/snmp/snmp.conf') do
-  it { should exist }
-  its('type') { should cmp 'file' }
-  it { should be_file }
-  it { should_not be_directory }
-end
-
-describe file('/etc/snmp/snmpd.conf') do
-  it { should exist }
-  its('type') { should cmp 'file' }
-  it { should be_file }
-  it { should_not be_directory }
-end
-
-describe port(161) do
-  it { should be_listening }
-  its('processes') { should include 'snmpd' }
+case os.family
+when 'redhat', 'fedora'
+  %w(net-snmp net-snmp-utils).each do |package|
+    describe package(package) do
+      it { should be_installed }
+    end
+  end
+when 'debian'
+  %w(snmp snmpd).each do |package|
+    describe package(package) do
+      it { should be_installed }
+    end
+  end
 end

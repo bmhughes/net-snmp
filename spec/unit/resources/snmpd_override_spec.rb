@@ -1,6 +1,6 @@
 #
 # Cookbook:: net_snmp
-# Spec:: default
+# Spec:: destination_spec
 #
 # Copyright:: Ben Hughes <bmhughes@bmhughes.co.uk>
 #
@@ -16,31 +16,23 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-describe service('snmpd') do
-  it { should be_installed }
-  it { should be_enabled }
-  it { should be_running }
-end
+require 'spec_helper'
 
-describe directory('/etc/snmp') do
-  it { should exist }
-end
+describe 'net_snmp_snmpd_config' do
+  step_into :net_snmp_snmpd_override
+  platform 'centos'
 
-describe file('/etc/snmp/snmp.conf') do
-  it { should exist }
-  its('type') { should cmp 'file' }
-  it { should be_file }
-  it { should_not be_directory }
-end
+  context 'Create net-snmp snmpd configuration file override' do
+    recipe do
+      net_snmp_snmpd_override 'sysDescr.0' do
+        type 'octet_str'
+        value 'Overriden sysDescr'
+      end
+    end
 
-describe file('/etc/snmp/snmpd.conf') do
-  it { should exist }
-  its('type') { should cmp 'file' }
-  it { should be_file }
-  it { should_not be_directory }
-end
-
-describe port(161) do
-  it { should be_listening }
-  its('processes') { should include 'snmpd' }
+    it 'Creates the global configuration file override correctly' do
+      is_expected.to render_file('/etc/snmp/snmpd.conf')
+        .with_content(/override sysDescr.0 octet_str "Overriden sysDescr"/)
+    end
+  end
 end

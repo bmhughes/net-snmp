@@ -1,14 +1,14 @@
 ---
 driver:
   name: vagrant
-  chef_version: current
+  chef_version: <%= ENV['CHEF_VERSION'] || 'current' %>
 
 provisioner:
   name: chef_zero
   always_update_cookbooks: true
   deprecations_as_errors: true
   chef_license: accept
-  chef_log_level: auto
+  chef_log_level: <%= ENV['CHEF_LOG_LEVEL'] || 'auto' %>
   product_name: chef
   product_version: latest
 
@@ -18,12 +18,16 @@ verifier:
 platforms:
   - name: centos-7
   - name: centos-8
-  - name: fedora-30
+  - name: fedora-31
+  - name: ubuntu-1804
+  - name: ubuntu-2004
+  - name: debian-10
 
 suites:
   - name: default
     run_list:
-      - recipe[net_snmp::default]
+      - recipe[net_snmp_test::net_setup]
+      - recipe[net_snmp_test::default]
     verifier:
       inspec_tests:
         - test/integration/default
