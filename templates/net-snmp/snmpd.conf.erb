@@ -98,22 +98,23 @@ dlmod <%= name %> <%= path %>
 <% @extend.each do |method, configurations| -%>
 # <%= method %>
 <% configurations.each do |configuration| -%>
-<%= method %><% if configuration['miboid'] -%> <%=configuration['miboid'] -%><% end -%> <%= configuration['name'] -%> <%= configuration['program'] -%> <%= configuration['arguments'] -%>
+<%= method %><% if configuration['miboid'] -%> <%=configuration['miboid'] %><% end -%> <%= configuration['name'] %> <%= configuration['program'] %> <%= configuration['arguments'] %>
 <% end -%>
+
 <% end -%>
 <% end -%>
 <% unless nil_or_empty?(@override) -%>
 
 ## Override OID Configuration
 <% @override.each do |oid, configuration| -%>
-override<% if configuration['rw'] -%> -rw<% end -%> <%= configuration['oid'] -%> <%= configuration['type'] -%> <%= configuration['value'] -%>
+override<% if configuration['rw'] -%> -rw<% end -%> <%= configuration['oid'] %> <%= configuration['type'] %> <%= configuration['value'] %>
 <% end -%>
 <% end -%>
 <% unless nil_or_empty?(@proxy) -%>
 
 ## Proxy OID Configuration
 <% @proxy.each do |configuration| -%>
-proxy<% if configuration['context'] -%> -Cn <%= configuration['context'] -%><% end -%> <%= configuration['snmp_command_arguments'] -%> <%= configuration['host'] -%> <%= configuration['oid'] -%> <%= configuration['remote_oid'] -%>
+proxy<% if configuration['context'] -%> -Cn <%= configuration['context'] %><% end -%> <%= configuration['snmp_command_arguments'] %> <%= configuration['host'] %> <%= configuration['oid'] %> <%= configuration['remote_oid'] %>
 <% end -%>
 <% end -%>
 <% unless nil_or_empty?(@additional_parameters) -%>

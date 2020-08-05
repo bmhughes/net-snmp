@@ -22,6 +22,12 @@ net_snmp_snmpd_extend 'distro' do
   program '/usr/bin/distro'
 end
 
+net_snmp_snmpd_extend 'hardware' do
+  type :extend
+  miboid '.1.3.6.1.4.1.2021.7890.2'
+  program '"/bin/cat /sys/devices/virtual/dmi/id/product_name"'
+end
+
 net_snmp_snmpd_extend 'pass_test' do
   type :pass
   miboid '.1.3.6.1.4.1.2022.7890.1'
