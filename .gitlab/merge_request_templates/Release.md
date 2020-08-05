@@ -21,8 +21,8 @@ Have the following been done/altered for this release?
 
 #### Kitchen
 
-- [ ] .kitchen.yml
-- [ ] .kitchen.dokken.yml
+- [ ] kitchen.yml
+- [ ] kitchen.dokken.yml
 
 #### CI
 
