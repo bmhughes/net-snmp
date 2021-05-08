@@ -1,7 +1,6 @@
 ---
 driver:
   name: vagrant
-  chef_version: <%= ENV['CHEF_VERSION'] || 'current' %>
 
 provisioner:
   name: chef_zero
@@ -10,7 +9,7 @@ provisioner:
   chef_license: accept
   chef_log_level: <%= ENV['CHEF_LOG_LEVEL'] || 'auto' %>
   product_name: chef
-  product_version: latest
+  product_version: <%= ENV['CHEF_VERSION'] || 'current' %>
 
 verifier:
   name: inspec
@@ -18,7 +17,7 @@ verifier:
 platforms:
   - name: centos-7
   - name: centos-8
-  - name: fedora-31
+  - name: fedora-34
   - name: ubuntu-1804
   - name: ubuntu-2004
   - name: debian-10
